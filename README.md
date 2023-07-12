@@ -2,7 +2,7 @@
 
 [Xingyu Lin](https://xingyu-lin.github.io)\*,
 [John So](https://www.johnrso.xyz/)\*,
-[Sashwat Mahalingam](),
+[Sashwat Mahalingam](https://sashwat-mahalingam.github.io),
 [Fangchen Liu](https://fangchenliu.github.io/),
 [Pieter Abbeel](https://people.eecs.berkeley.edu/~pabbeel/)
 
@@ -60,7 +60,7 @@ module in `simple_bc`.
 ### `gdict`
 
 This is a library for storing dictionaries of tensors; supports array-like indexing and slicing, and
-dictionary-like key indexing. Extracted from [ManiSkill2-Learn](https://github.com/haosulab/ManiSkill2-Learn).
+dictionary-like key indexing. Extracted from [ManiSkill2-Learn](https://github.com/haosulab/ManiSkill2-Learn)
 
 ### `simple_bc`
 
@@ -92,8 +92,22 @@ An example of training `SpawnNet` DAgger on the `Open Drawer` task is found in `
 
 1. Make sure to specify the `ISAACGYM_ARG_STR` as an environment variable (it should be the exact same value as the example).
 2. For the drawer task, use `isaacgym_task=open_drawer`, and for the door task, use `isaacgym_task=open_door_21`.
+3. **Optional**: Our framework splits 21 training assets among the allocated GPUs. Each asset has a corresponding simulation environment that's assigned to the same GPU as the asset. By default, each GPU gets `floor(21 / num_gpus)` assets (with the remainder assets going to the last GPU). If you wish to split the assets differently, set the variable `TRAIN_ASSET_SPLIT` as follows when kicking off the `train.py` script:
+    ```sh
+    TRAIN_ASSET_SPLIT=<# assets on 0th GPU>,<# assets on 1st GPU>,<# assets on 2nd GPU>,...
+    ```
+    When a larger model is being trained, the primary GPU (where the model resides) may run into CUDA memory issues from sharing space with too many simulation environments. The other GPUs may have space to load more environments. This fix is helpful for that case.
+    *Note that this custom asset splitting only applies for training.*
 
 We provide entrypoints for each experiment in `scripts/sim_exps`.
+
+#### Debugging Training
+We provide a script, `scripts/sim_exps/sim_debug.sh`, to assist with debugging training in simulation. This script enforces only one environment, one GPU, to be used.
+
+You can run the script as is to test that the `spawnnet` simulation framework is functioning correctly. You can also test different methods, tasks, and seeds by following the comments in the script. Leave the `ISAACGYM_ARG_STR` as is, to ensure only one environment is loaded (for faster testing).
+
+**Note: This script always runs with only one GPU.**
+
 
 ### Evaluation
 

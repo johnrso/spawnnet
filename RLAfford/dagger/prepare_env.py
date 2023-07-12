@@ -1,3 +1,4 @@
+import os
 from natsort import natsorted
 
 def filter_assets(cfg, chunk_id, chunk_size, mode):
@@ -15,15 +16,26 @@ def filter_assets(cfg, chunk_id, chunk_size, mode):
         cfg['env']['numTrain'] = 0
         cfg['env']['asset']['cabinetAssetNumTrain'] = 0
     total_assets = cfg["env"]["asset"][num_assets_key]
-    if chunk_id == chunk_size - 1:
-        num_assets = total_assets - (chunk_size - 1) * (total_assets // chunk_size)
-    else:
-        num_assets = total_assets // chunk_size
+    
+    if mode == 'train' and os.environ.get('TRAIN_ASSET_SPLIT') is not None:
+        asset_sizes = os.environ.get('TRAIN_ASSET_SPLIT')
+        asset_sizes = [int(x) for x in asset_sizes.split(',')]
 
+        assert sum(asset_sizes) == total_assets, "Must use exactly all assets. Usage: {}, Expected Usage: {}".format(sum(asset_sizes), total_assets)
+
+        num_assets = asset_sizes[chunk_id]
+        asset_start_idx = sum(asset_sizes[:chunk_id])
+    else:
+        if chunk_id == chunk_size - 1:
+            num_assets = total_assets - (chunk_size - 1) * (total_assets // chunk_size)
+        else:
+            num_assets = total_assets // chunk_size
+        
+        asset_start_idx = chunk_id * (total_assets // chunk_size)
+    
     cfg['env'][num_env_key] = num_assets
     cfg['env']['asset'][num_assets_key] = num_assets
-
-    asset_start_idx = chunk_id * (total_assets // chunk_size)
+          
     asset_infos = cfg["env"]["asset"][assets_key]
     asset_names = natsorted(asset_infos.keys())
     cfg["env"]["asset"][assets_key] = {asset_names[i]: asset_infos[asset_names[i]] for i in
@@ -45,7 +57,7 @@ def prepare_isaacgym_env_expert(isaacgym_arg_str: str,
     """
     Total constraints on assets and environments:
         - The environments must be divisible over the GPUs.
-        - The assets must be divisible over the GPUs, or an asset cap must be enforced.
+        - The assets must be divisible over the GPUs.
         - The assets per GPU must be divisible over the environments per GPU.
     """
     from MARL_Module.envs.utils.config import get_args, load_cfg, parse_sim_params, set_np_formatting

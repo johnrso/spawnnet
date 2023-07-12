@@ -41,7 +41,7 @@ def aggregate_results(folder):
 @click.command()
 @click.argument('exp_folder', type=click.Path(exists=True))
 @click.option('--n_assets', default=8, help='Number of assets per chunk')
-@click.option('--n_eval', default=10, help='Number of rollouts to evaluate')
+@click.option('--n_eval', default=5, help='Number of rollouts to evaluate')
 def main(exp_folder, n_assets, n_eval):
     all_exp_video_files = glob(os.path.join(exp_folder, '**', 'videos'), recursive=True)
     all_exp_folders = natsorted([os.path.dirname(video_folder) for video_folder in all_exp_video_files])
