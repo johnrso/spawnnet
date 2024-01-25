@@ -142,4 +142,4 @@ To add tasks, please refer to `simple_bc/constants.py`, and follow the format fo
 
 The `gdict` library is adopted from [`ManiSkill2-Learn`](https://github.com/haosulab/ManiSkill2-Learn). Additionally, we use tasks and assets from [`RLAfford`](https://github.com/hyperplane-lab/RLAfford).
 
-THIS SOFTWARE AND/OR DATA WAS DEPOSITED IN THE BAIR OPEN RESEARCH COMMONS REPOSITORY ON Jul. 7.
+THIS SOFTWARE AND/OR DATA WAS DEPOSITED IN THE BAIR OPEN RESEARCH COMMONS REPOSITORY ON Jul. 7., 2022.
