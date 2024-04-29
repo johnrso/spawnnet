@@ -123,7 +123,7 @@ WHICH_GPUS=0 python RLAfford/dagger/eval.py <your exp dir> --chunk_id 0 --num_ch
 and results get saved the same way as SLURM.
 
 ## Real World Experiments
-For Real World BC Experiments, the demonstration set for the Place Bag task can be found at [this Google Drive link](https://drive.google.com/uc?id=1A4RGlKM7GDalBAA4jKTmjcMyUzkwFBJW). You can download this with [gdown](https://github.com/wkentaro/gdown). After downloading, place the unzipped directory into `/dataset`.
+For Real World BC Experiments, the demonstration set for the Place Bag task can be found at [this Google Drive link](https://drive.google.com/drive/folders/12_ulPzM9fOiNatjLY_pfw6AvaBnGP-j_?usp=sharing). You can download this with [gdown](https://github.com/wkentaro/gdown). After downloading, place the unzipped directory into `/dataset`.
 
 Similarly to simulation, we provide entry points under `scripts/real_exps`.
 
